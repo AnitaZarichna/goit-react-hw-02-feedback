@@ -1,41 +1,58 @@
-import { Component } from 'react';
+
+import React, { useState } from 'react';
+import { Section } from './section/Section';
 import { FeedbackOptions } from './feedbackOptions/FeedbackOptions';
+import { Statistics } from './statistics/Statistics';
 
-export class App extends Component{
+export const App = () => {
 
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0
+  const [good, setGood] = useState (0);
+  const [neutral, setNeutral] = useState (0);
+  const [bad, setBad] = useState (0);
+
+  function onClickBtn(evt) {
+
+    switch (evt.target.name) {
+      case 'good':
+        setGood(good + 1);
+        break;
+      case 'neutral':
+        setNeutral(neutral + 1);
+        break;
+      case 'bad':
+        setBad(bad + 1);
+        break;
+
+      default:
+        break;
+    }
   }
 
+  const countTotalFeedback = () => {
+    return good + neutral + bad
+  };
+  const countPositiveFeedbackPercentage = () => {
+    return Math.floor((+good * 100) / +countTotalFeedback());
+  };
 
-  onClickBtn = evt => {
-    this.setState(prevState => ({
-        [evt.target.name]: prevState[evt.target.name] + 1,
-    }));
-};
+  const stats = ['good', 'neutral', 'bad'];
 
-  render(){
-    return( 
-      <div>
-        <div>
-        <title>Please leave feedback!</title>
-        <FeedbackOptions
-        options={this.state}
-        onLeaveFeedback={this.onClickBtn}/>   
-        </div>
-        <div>
-        <title>Statistics</title>
-        <ul>
-          <li>Good</li>
-          <li>Neutral</li>
-          <li>Bad</li>
-          <li>Total</li>
-          <li>Positive feedback</li>
-        </ul>
-        </div>
-        </div>
-    );
-  }
+  return (
+ <div>
+  <Section title="Please leave feedback">
+<FeedbackOptions options={stats} onClickBtn = {onClickBtn}/>
+  </Section>
+
+  <Section title ="Statistics" >
+<Statistics 
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        total={countTotalFeedback()}
+        positivePercentage={countPositiveFeedbackPercentage()}>
+</Statistics>
+  </Section>
+  </div>
+  
+  )
 }
