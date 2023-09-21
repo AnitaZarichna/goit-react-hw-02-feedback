@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { ButtonList, ButtonItem , Button } from "./FeedbackOptions.styled"
 
 
@@ -13,3 +14,8 @@ return (
     ))}
   </ButtonList>
 )}
+
+FeedbackOptions.propTypes = {
+    options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    onClickBtn: PropTypes.func.isRequired
+}
